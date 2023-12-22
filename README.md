@@ -1,4 +1,4 @@
-# Python-cods
+# Python-Codes
 For education and helping to improve our skills
 
 What's up everybody
