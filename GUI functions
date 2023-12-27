@@ -75,3 +75,64 @@ def imNotFeelingLuckyButtonPress():
 def set_text(entry, text):
     entry.delete(0, customtkinter.END)
     entry.insert(0, text)
+
+
+# ------------------------------------============================= UI =============================------------------------------------
+
+
+
+customtkinter.set_appearance_mode("light")
+
+root = customtkinter.CTk()
+
+root.title("beda Search")
+
+root.geometry("1280x720")
+frame = customtkinter.CTkFrame(
+    master=root, width=1280, height=720, fg_color='white')
+frame.pack(fill="both", expand=True)
+
+label = customtkinter.CTkLabel(
+    master=frame, text="beda Search", font=("Arial", 150))
+label.pack(pady=12, padx=10)
+
+searchEntry = customtkinter.CTkEntry(
+    master=frame, height=50, width=550, corner_radius=50, font=("Arial", 22))
+searchEntry.bind('<Return>', searchButtonPress)
+searchEntry.pack(pady=12, padx=10)
+
+# ---=== start button frame ===--- #
+
+buttonsFrame = customtkinter.CTkFrame(
+    master=frame, width=500, fg_color='white')
+buttonsFrame.pack()
+
+searchButton = customtkinter.CTkButton(
+    master=buttonsFrame, text="beda Search engine", width=200, height=50, font=("Arial", 18), fg_color='#f8f9fa', hover_color='#c5c6c6', text_color='#202124', command=searchButtonPress)
+searchButton.pack(pady=12, padx=10, side='left')
+
+imNotFeelingLuckyButton = customtkinter.CTkButton(
+    master=buttonsFrame, text="randem search", width=200, height=50, font=("Arial", 18), fg_color='#f8f9fa', hover_color='#c5c6c6', text_color='#202124', command=imNotFeelingLuckyButtonPress)
+imNotFeelingLuckyButton.pack(pady=12, padx=10, side='left')
+
+# ---=== end button frame ===--- #
+
+# ---=== start info frame ===--- #
+
+infoFrame = customtkinter.CTkFrame(master=frame, width=400, fg_color='white')
+infoFrame.pack(pady=12, padx=10)
+
+numResultsLabel = customtkinter.CTkLabel(
+    master=infoFrame, text="0 Results", font=("Arial", 16))
+numResultsLabel.pack(padx=50, pady=6, side='left')
+# ---=== start Time results info frame ===--- #
+timeLabel = customtkinter.CTkLabel(
+    master=infoFrame, text="Time: 0ms", font=("Arial", 16))
+timeLabel.pack(padx=50, pady=6, side='right')
+
+# ---=== end info frame ===--- #
+
+searchList = customtkinter.CTkScrollableFrame(master=frame, fg_color='#ebecec')
+searchList.pack(padx=10, pady=10, fill="both", expand=True)
+
+root.mainloop()
