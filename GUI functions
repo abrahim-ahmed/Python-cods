@@ -1,0 +1,77 @@
+
+def searchButtonPress(event=None):
+    global searchEntry
+   
+    # Getting the input
+    query = searchEntry.get()
+    # Stemming
+    query = ' '.join(stem_words(word_tokenize(query)))
+    query_vec = vectorizer.transform([query])
+
+    # search
+    startTime = time.time()
+    results = cosine_similarity(X, query_vec).reshape((-1,))
+    endTime = time.time()
+    
+    nbresults = (results != 0).sum()
+
+    # set info
+    updateInfo(nbresults, (endTime - startTime)*10**3)
+
+    fillList(results)
+
+
+def updateInfo(numResults, time):
+    global numResultsLabel
+    global timeLabel
+
+    numResultsLabel.configure(text=(str(numResults) + " Results"))
+    timeLabel.configure(text=("Time: " + str(int(time)) + "ms"))
+
+
+def fillList(results):
+    global data
+    global searchList
+    global frame
+
+    # clear list
+    searchList.pack_forget()
+    searchList.destroy()
+
+    searchList = customtkinter.CTkScrollableFrame(
+        master=frame, fg_color='#ebecec')
+    searchList.pack(padx=10, pady=10, fill="both", expand=True)
+        
+    count = 0
+    for i in results.argsort()[-10:][::-1]:
+        temFrame = customtkinter.CTkFrame(master=searchList)
+        temFrame.pack(padx=10, pady=10, fill="x")
+
+        headline = customtkinter.CTkLabel(
+            master=temFrame, text=df_news.iloc[i,0], font=("Arial", 18), wraplength=1200)
+        headline.pack(padx=5, pady=2)
+
+        if len(df_news.iloc[i,1]) != 0:
+            short_description = customtkinter.CTkLabel(
+                master=temFrame, text=df_news.iloc[i,1], font=("Arial", 16), wraplength=1200)
+            short_description.pack(padx=5, pady=2)
+
+        if len(df_news.iloc[i,2]) != 0:
+            authors = customtkinter.CTkLabel(
+                master=temFrame, text="Authors: " + df_news.iloc[i,2], wraplength=1200)
+            authors.pack(padx=5, pady=2)
+
+        count += 1
+        if count >= 20:
+            break
+
+def imNotFeelingLuckyButtonPress():
+    global vectorizer
+    global searchEntry
+
+    set_text(searchEntry, random.choice(list(vectorizer.vocabulary_.keys())))
+    searchButtonPress()
+
+def set_text(entry, text):
+    entry.delete(0, customtkinter.END)
+    entry.insert(0, text)
